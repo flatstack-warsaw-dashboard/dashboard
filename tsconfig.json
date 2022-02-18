@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "sourceMap": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "declaration": false,
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "lib": ["dom", "dom.iterable", "esnext"]
+  },
+  "include": ["./src/**/*"]
+}
