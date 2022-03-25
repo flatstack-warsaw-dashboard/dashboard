@@ -1,0 +1,13 @@
+[
+  {
+    "manifest": "https://flatstack-warsaw-dashboard.github.io/hello-world-widget/manifest.json",
+    "name": "PTO",
+    "customElement": "fwd-pto-calendar",
+    "position": {
+      "x": 0,
+      "y":0,
+      "width": 10,
+      "height": 10
+    }
+  }
+]
