@@ -1,7 +1,17 @@
 import { URL } from 'node:url';
+import { readFile } from 'node:fs/promises';
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const packageJson = JSON.parse(
+  await readFile(new URL('./package.json', import.meta.url), {
+    encoding: 'utf8',
+  }),
+);
+
+const deps = packageJson.dependencies;
 
 export default {
   context: new URL('./src', import.meta.url).pathname,
@@ -29,6 +39,25 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
+    }),
+    new webpack.container.ModuleFederationPlugin({
+      name: 'dashboard',
+      shared: {
+        ...deps,
+        react: {
+          singleton: true,
+          requiredVersion: deps.react,
+        },
+        'react/jsx-runtime': { singleton: true },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: deps['react-dom'],
+        },
+        'styled-components': {
+          singleton: true,
+          requiredVersion: deps['styled-component'],
+        },
+      },
     }),
   ],
 };
