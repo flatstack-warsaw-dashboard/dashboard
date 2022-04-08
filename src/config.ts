@@ -29,4 +29,19 @@ export default [
       height: 320,
     },
   },
+  {
+    id: 'cryptoWidget',
+    remoteUrl:
+      'https://btc-widget.s3.eu-west-2.amazonaws.com/dist/remote.js',
+    remoteName: 'cryptoWidget',
+    name: 'BTC Info Widget',
+    exposedName: '.',
+    customElement: 'fwd-crypto-widget',
+    position: {
+      x: 15,
+      y: 0,
+      width: 320,
+      height: 320,
+    },
+  },
 ] as const;
