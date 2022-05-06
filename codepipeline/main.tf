@@ -7,11 +7,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "tf-remote-state20220502044723327700000001"
-    key            = "codepipeline.tfstate"
-    region         = "eu-central-1"
-    encrypt        = true
-    dynamodb_table = "tf-remote-state-locks"
+    bucket               = "fwd-dashboard-app-tf-remote-state"
+    key                  = "codepipeline.tfstate"
+    region               = "eu-central-1"
+    encrypt              = true
+    dynamodb_table       = "tf-remote-state-locks"
     workspace_key_prefix = "codepipeline/env:"
   }
 }
@@ -20,12 +20,16 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-/*resource "aws_codepipeline" "codepipeline" {
-  name     = "dashboard-app-${var.branch}"
+locals {
+  branch = terraform.workspace == "default" ? "main" : terraform.workspace
+}
+
+resource "aws_codepipeline" "codepipeline" {
+  name     = "dashboard-app-${local.branch}"
   role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
-    location = aws_s3_bucket.codepipeline_bucket.bucket
+    location = "fwd-dashboard-app-codepipeline-artifacts"
     type     = "S3"
   }
 
@@ -43,7 +47,7 @@ provider "aws" {
       configuration = {
         ConnectionArn    = aws_codestarconnections_connection.gh_connection.arn
         FullRepositoryId = "flatstack-warsaw-dashboard/dashboard"
-        BranchName       = var.branch
+        BranchName       = local.branch
       }
     }
   }
@@ -52,7 +56,7 @@ provider "aws" {
     name = "Deploy"
 
     action {
-      name            = "Terraform apply"
+      name            = "tf-apply"
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
@@ -60,7 +64,13 @@ provider "aws" {
       input_artifacts = ["source_output"]
 
       configuration = {
-        ProjectName = aws_codebuild_project.tf_apply_dashboard_app.name
+        ProjectName = "tf_apply_dashboard_app"
+        EnvironmentVariables = jsonencode([
+          {
+            name : "BRANCH",
+            value : local.branch
+          }
+        ])
       }
     }
   }
@@ -69,25 +79,6 @@ provider "aws" {
 resource "aws_codestarconnections_connection" "gh_connection" {
   name          = "gh-connection"
   provider_type = "GitHub"
-}
-
-resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket_prefix = "codepipeline-artifacts"
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "codepipeline_bucket_sse_config" {
-  bucket = aws_s3_bucket.codepipeline_bucket.bucket
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "aws:kms"
-    }
-  }
-}
-
-resource "aws_s3_bucket_acl" "codepipeline_bucket_acl" {
-  bucket = aws_s3_bucket.codepipeline_bucket.id
-  acl    = "private"
 }
 
 resource "aws_iam_role" "codepipeline_role" {
@@ -124,8 +115,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:PutObject"
         ],
         "Resource" : [
-          aws_s3_bucket.codepipeline_bucket.arn,
-          "${aws_s3_bucket.codepipeline_bucket.arn}*//*"
+          "arn:aws:s3:::fwd-dashboard-app-codepipeline-artifacts",
+          "arn:aws:s3:::fwd-dashboard-app-codepipeline-artifacts/*"
         ]
       },
       {
@@ -145,5 +136,4 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       }
     ]
   })
-}*/
-
+}
