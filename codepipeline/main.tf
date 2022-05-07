@@ -22,6 +22,7 @@ provider "aws" {
 
 locals {
   branch = terraform.workspace == "default" ? "main" : terraform.workspace
+  target_workspace = local.branch == "main" ? "staging" : "branch-${local.branch}"
 }
 
 resource "aws_codepipeline" "codepipeline" {
@@ -67,8 +68,8 @@ resource "aws_codepipeline" "codepipeline" {
         ProjectName = "tf_apply_dashboard_app"
         EnvironmentVariables = jsonencode([
           {
-            name : "BRANCH",
-            value : local.branch
+            name : "TARGET_WORKSPACE",
+            value : local.target_workspace
           }
         ])
       }
