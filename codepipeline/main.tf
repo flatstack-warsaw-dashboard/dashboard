@@ -75,6 +75,46 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
   }
+
+  dynamic "stage" {
+    for_each = local.branch == "main" ? [1] : []
+    content {
+      name = "Approve"
+      action {
+        name     = "Production-Approval"
+        category = "Approval"
+        owner    = "AWS"
+        provider = "Manual"
+        version  = "1"
+      }
+    }
+  }
+
+  dynamic "stage" {
+    for_each = local.branch == "main" ? [1] : []
+    content {
+      name = "Deploy-Production"
+
+      action {
+        name            = "tf-apply"
+        category        = "Build"
+        owner           = "AWS"
+        provider        = "CodeBuild"
+        version         = "1"
+        input_artifacts = ["source_output"]
+
+        configuration = {
+          ProjectName = "tf_apply_dashboard_app"
+          EnvironmentVariables = jsonencode([
+            {
+              name : "TARGET_WORKSPACE",
+              value : "production"
+            }
+          ])
+        }
+      }
+    }
+  }
 }
 
 resource "aws_codestarconnections_connection" "gh_connection" {
