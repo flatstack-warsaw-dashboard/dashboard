@@ -46,7 +46,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.gh_connection.arn
+        ConnectionArn    = data.aws_codestarconnections_connection.gh_connection.arn
         FullRepositoryId = "flatstack-warsaw-dashboard/dashboard"
         BranchName       = local.branch
       }
@@ -117,13 +117,12 @@ resource "aws_codepipeline" "codepipeline" {
   }
 }
 
-resource "aws_codestarconnections_connection" "gh_connection" {
-  name          = "gh-connection"
-  provider_type = "GitHub"
+data "aws_codestarconnections_connection" "gh_connection" {
+  arn = "arn:aws:codestar-connections:eu-central-1:157940840475:connection/cc0f48e5-b52b-4278-8ce6-c1ae79802428"
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name = "codepipeline"
+  name = "codepipeline-${local.branch}"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -165,7 +164,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "Action" : [
           "codestar-connections:UseConnection"
         ],
-        "Resource" : aws_codestarconnections_connection.gh_connection.arn
+        "Resource" : data.aws_codestarconnections_connection.gh_connection.arn
       },
       {
         "Effect" : "Allow",
