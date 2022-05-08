@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = "fwd-dashboard-app-codepipeline-artifacts"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "codepipeline_bucket_sse_config" {

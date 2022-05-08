@@ -6,13 +6,13 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket         = "fwd-dashboard-app-tf-remote-state"
-    key            = "shared_infra.tfstate"
-    region         = "eu-central-1"
-    encrypt        = true
-    dynamodb_table = "tf-remote-state-locks"
-  }
+#  backend "s3" {
+#    bucket         = "fwd-dashboard-app-tf-remote-state"
+#    key            = "shared_infra.tfstate"
+#    region         = "eu-central-1"
+#    encrypt        = true
+#    dynamodb_table = "tf-remote-state-locks"
+#  }
 }
 
 provider "aws" {
