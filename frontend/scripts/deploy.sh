@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euxo pipefail
 
 dist_rel_path=$(dirname $0)/../dist
 dist_path=$(realpath $dist_rel_path)
