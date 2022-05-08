@@ -36,9 +36,10 @@ resource "aws_codebuild_project" "tf_apply_dashboard_app" {
   }
 
   environment {
-    compute_type = "BUILD_GENERAL1_SMALL"
-    image        = "aws/codebuild/amazonlinux2-aarch64-standard:2.0"
-    type         = "ARM_CONTAINER"
+    compute_type    = "BUILD_GENERAL1_SMALL"
+    image           = "aws/codebuild/amazonlinux2-aarch64-standard:2.0"
+    type            = "ARM_CONTAINER"
+    privileged_mode = true
   }
 
   source {
