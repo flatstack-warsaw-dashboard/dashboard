@@ -23,57 +23,13 @@ locals {
   buildspec = file("buildspec.yml")
 }
 
-resource "aws_iam_role" "codebuild_tf_apply" {
-  name = "codebuild_tf_apply"
-
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "codebuild.amazonaws.com"
-        },
-        "Action" : "sts:AssumeRole"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy" "example" {
-  role = aws_iam_role.codebuild_tf_apply.name
-
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Resource" : [
-          "*"
-        ],
-        "Action" : [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:GetObject"
-        ],
-        "Resource" : [
-          "arn:aws:s3:::fwd-dashboard-app-codepipeline-artifacts",
-          "arn:aws:s3:::fwd-dashboard-app-codepipeline-artifacts/*"
-        ]
-      }
-    ]
-  })
+data "aws_iam_role" "admin" {
+  name = "admin"
 }
 
 resource "aws_codebuild_project" "tf_apply_dashboard_app" {
   name         = "tf_apply_dashboard_app"
-  service_role = aws_iam_role.codebuild_tf_apply.arn
+  service_role = data.aws_iam_role.admin.arn
 
   artifacts {
     type = "CODEPIPELINE"
