@@ -133,3 +133,7 @@ resource "aws_s3_object" "file" {
   etag   = filemd5("${path.module}/dist/${each.value}")
   content_type = lookup(module.file_extensions.mappings, regex("\\.([^.]+)$", each.value)[0], null)
 }
+
+output "domain_name" {
+  value = aws_cloudfront_distribution.s3_distribution.domain_name
+}
