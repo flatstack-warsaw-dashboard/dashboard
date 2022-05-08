@@ -29,4 +29,19 @@ export default [
       height: 320,
     },
   },
+  {
+    id: 'PublicRetroBoardWidgetAdamantium',
+    remoteUrl:
+      'https://objectstorage.eu-amsterdam-1.oraclecloud.com/n/ax4mayunfiab/b/Retro-app-bucket/o/dist/PublicRetroBoardWidget.js',
+    remoteName: 'PublicRetroBoardWidget',
+    name: 'Retro Board',
+    exposedName: '.',
+    customElement: 'fwd-retro-board-adamantium',
+    position: {
+      x: 0,
+      y: 0,
+      width: 320,
+      height: 320,
+    },
+  },
 ] as const;
