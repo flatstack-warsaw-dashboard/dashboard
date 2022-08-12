@@ -44,4 +44,15 @@ export default [
       height: 320,
     },
   },
+  {
+    id: 'FwdTweetWidget',
+    remoteUrl: 'https://widget-dist-bucket.s3.amazonaws.com/remote.js'
+    remoteName: 'FwdTweetWidget',
+    name: 'Recent Messages',
+    exposedName: '.',
+    customElement: 'fwd-tweet-widget',
+    position: {
+      x: 0, y: 0, height: 320, width: 320,
+    },
+  },
 ] as const;
