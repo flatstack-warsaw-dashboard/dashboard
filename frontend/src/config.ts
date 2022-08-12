@@ -46,7 +46,7 @@ export default [
   },
   {
     id: 'FwdTweetWidget',
-    remoteUrl: 'https://widget-dist-bucket.s3.amazonaws.com/remote.js'
+    remoteUrl: 'https://widget-dist-bucket.s3.amazonaws.com/remote.js',
     remoteName: 'FwdTweetWidget',
     name: 'Recent Messages',
     exposedName: '.',
