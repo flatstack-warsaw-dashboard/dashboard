@@ -6,11 +6,12 @@ import { injectScript, loadFederatedModule } from './federation';
 type Props = typeof config[number];
 
 const Wrapper = styled.section`
-  width: 100%;
-  height: 35em;
   box-shadow: 0 0.5em 1em 0.2em rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
+  margin: 0.5em;
+  height: fit-content;
+  max-width: 30em;
+  max-height: 25em;
+  overflow: scroll;
 `;
 
 const Header = styled.header`

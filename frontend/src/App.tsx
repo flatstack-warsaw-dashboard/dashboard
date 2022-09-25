@@ -16,21 +16,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Container = styled.div`
-  padding: 1rem;
-`;
-
-const Header = styled.header`
-  box-shadow: 0 0.5em 1em 0.2em rgba(0, 0, 0, 0.5);
-  font-weight: bold;
-  font-size: 1.2em;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const App = () => (
   <>
     <GlobalStyle />
-    <Header>
-      <Container>Flatstack Warsaw Dashboard</Container>
-    </Header>
     <Container>
       {config.map((widgetConfig) => (
         <Widget key={widgetConfig.id} {...widgetConfig} />
