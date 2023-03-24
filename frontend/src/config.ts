@@ -41,7 +41,7 @@ export default [
     id: 'BirthdaysWidget',
     remoteUrl: 'https://birthdays-widget.s3.eu-central-1.amazonaws.com/dist/remote.js',
     remoteName: 'birthdaysWidget',
-    name: 'Birthdays',
+    name: 'Upcoming Birthdays',
     exposedName: '.',
     customElement: 'fwd-birthdays-widget',
   },
